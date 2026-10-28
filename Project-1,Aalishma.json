@@ -1,0 +1,1531 @@
+{
+  "name": "Project-1",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        0
+      ],
+      "id": "cc514c23-38af-40da-abce-1e832697630b",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Purchase Request",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        384,
+        176
+      ],
+      "id": "47c8e25f-703b-4b3e-9512-9df636dd20f2",
+      "name": "Purchase request",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 456752939,
+          "mode": "list",
+          "cachedResultName": "Supplier Quotations",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit#gid=456752939"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        -192
+      ],
+      "id": "9c6f7f43-c677-4179-9746-caf550e1d1e1",
+      "name": "Supplier Quotations",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1316855834,
+          "mode": "list",
+          "cachedResultName": "Supplier History",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit#gid=1316855834"
+        },
+        "options": {
+          "outputFormatting": {
+            "values": {
+              "general": "UNFORMATTED_VALUE",
+              "date": "FORMATTED_STRING"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        160,
+        0
+      ],
+      "id": "b008c187-3796-492b-9173-580403439c01",
+      "name": "Supplier history",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "fieldsToMatchString": "Supplier ID",
+        "joinMode": "enrichInput1",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        384,
+        -96
+      ],
+      "id": "d077ae43-d34d-4601-b6e7-b126bcf59ccb",
+      "name": "Merge 1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineAll",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        608,
+        0
+      ],
+      "id": "5edc129e-a4fe-4009-9d7f-d3e221a944a1",
+      "name": "Merge 2"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const data = item.json;\n\n  // Processor check: i5 or higher passes\n  const processor = String(data[\"Processor\"]).toLowerCase();\n  const processorPass =\n    processor.includes(\"i5\") ||\n    processor.includes(\"i7\") ||\n    processor.includes(\"i9\");\n\n  // Check for missing required information\n  const missingInformation = [];\n\n  const requiredFields = [\n    \"Supplier ID\",\n    \"Supplier Name\",\n    \"Product\",\n    \"Quantity\",\n    \"Total Price\",\n    \"Delivery Time Days\",\n    \"Warranty Years\",\n    \"RAM GB\",\n    \"Storage GB\",\n    \"Processor\",\n    \"Operating System\",\n    \"Payment Terms\"\n  ];\n\n  for (const field of requiredFields) {\n    if (\n      data[field] === undefined ||\n      data[field] === null ||\n      data[field] === \"\"\n    ) {\n      missingInformation.push(field);\n    }\n  }\n\n  // Deterministic compliance checks\n  const complianceChecks = {\n    budget: Number(data[\"Total Price\"]) <= Number(data[\"Maximum Budget\"]),\n\n    quantity: Number(data[\"Quantity\"]) === 25,\n\n    delivery:\n      Number(data[\"Delivery Time Days\"]) <=\n      Number(data[\"Required Delivery Days\"]),\n\n    warranty:\n      Number(data[\"Warranty Years\"]) >=\n      Number(data[\"Minimum Warranty Years\"]),\n\n    ram:\n      Number(data[\"RAM GB\"]) >=\n      Number(data[\"Minimum RAM GB\"]),\n\n    storage:\n      Number(data[\"Storage GB\"]) >=\n      Number(data[\"Minimum Storage GB\"]),\n\n    processor: processorPass,\n\n    operatingSystem:\n      data[\"Operating System\"] === \"Licensed Windows 11 Pro\",\n\n    paymentTerms:\n      data[\"Payment Terms\"] === data[\"Payment Preference\"]\n  };\n\n  const allChecksPassed =\n    Object.values(complianceChecks).every(check => check === true) &&\n    missingInformation.length === 0;\n\n  item.json[\"Compliance Checks\"] = complianceChecks;\n  item.json[\"Missing Information\"] = missingInformation;\n  item.json[\"Compliance Status\"] =\n    allChecksPassed ? \"Compliant\" : \"Non-Compliant\";\n\n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        832,
+        0
+      ],
+      "id": "ef36e336-7bcc-4367-b8bd-b47408e3b34f",
+      "name": "Compliance checker"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the following supplier record according to your system instructions.\n\nSupplier data:\n\n{{ JSON.stringify($json) }}\n\nReturn the complete supplier record together with the Risk Explanation in the required JSON format.\n\nPreserve all original values exactly as provided.\n\nDo not make a final supplier recommendation, ranking, selection, rejection, or approval decision.\n",
+        "options": {
+          "systemMessage": "You are the Risk & Explanation AI in a Supplier Evaluation & Operations workflow.\n\nYour task is to analyze ONE supplier record at a time.\n\nYour role is explanatory and analytical only.\n\nSTRICT RULES:\n\n1. Do NOT make the final supplier recommendation.\n2. Do NOT rank suppliers.\n3. Do NOT select, reject, approve, or disqualify a supplier.\n4. Do NOT override, recalculate, or change the deterministic compliance results provided in the input.\n5. Do NOT invent facts, criteria, requirements, supplier history, or risk factors.\n6. Use only information present in the input record.\n7. Treat deterministic compliance checks as authoritative.\n8. Clearly distinguish between:\n\n   * deterministic compliance results,\n   * supplier historical observations,\n   * potential operational risks.\n9. Historical patterns may be identified as relevant evidence, but do NOT claim that one historical event caused a current supplier result unless the input explicitly establishes that relationship.\n10. If information is missing, state what is missing. Do not infer or fill it in.\n11. Evaluate the supplier independently. Do not compare it with other suppliers because only one supplier record is provided at a time.\n12. Preserve all original supplier values exactly as provided.\n\nAnalyze:\n\n* Compliance status and individual compliance checks.\n* Failed compliance requirements and the specific reason for each failure.\n* Missing required information.\n* Supplier historical performance, including rating, orders, late deliveries, quality complaints, and relationship history.\n* Relevant operational risks or anomalies supported by the data.\n\nThe risk explanation should be concise, factual, and useful to the next comparison stage.\n\nThe explanation must NOT contain:\n\n* a final recommendation,\n* a ranking,\n* a statement that this supplier is the best or worst,\n* a recommendation to select or reject the supplier,\n* an overall approval decision.\n\nOUTPUT FORMAT:\n\nReturn ONLY a valid JSON object.\n\nIMPORTANT:\n\n* Do NOT use Markdown.\n* Do NOT use code fences.\n* Do NOT write ```json.\n* Do NOT write ``` before or after the JSON.\n* Do NOT add any explanation outside the JSON object.\n* The first character of the response must be `{`.\n* The last character of the response must be `}`.\n\nUse exactly this structure:\n\n{\n\"Supplier ID\": \"...\",\n\"Supplier Name\": \"...\",\n\"Product\": \"...\",\n\"Quantity\": \"...\",\n\"Total Price\": \"...\",\n\"Delivery Time Days\": \"...\",\n\"Warranty Years\": \"...\",\n\"Payment Terms\": \"...\",\n\"RAM GB\": \"...\",\n\"Storage GB\": \"...\",\n\"Processor\": \"...\",\n\"Operating System\": \"...\",\n\"Supplier Rating\": \"...\",\n\"Orders Last Year\": \"...\",\n\"Late Deliveries\": \"...\",\n\"Quality Complaints\": \"...\",\n\"Previous Relationship Years\": \"...\",\n\"Compliance Checks\": {},\n\"Missing Information\": [],\n\"Compliance Status\": \"...\",\n\"Risk Explanation\": \"...\"\n}\n\nPreserve all original supplier values exactly as provided.\n\nDo not change, omit, rename, or reinterpret the original values.\n\nRisk Explanation must cover:\n\n1. The compliance result.\n2. Failed requirements and why they failed.\n3. Relevant supplier-history observations.\n4. Missing information, if any.\n5. Operational risks or considerations supported by the provided data.\n\nThe Risk Explanation must remain neutral and must not:\n\n* recommend a supplier,\n* rank suppliers,\n* select a supplier,\n* reject a supplier,\n* approve a supplier,\n* declare a supplier the best or worst.\n\nHistorical patterns may be identified as relevant evidence, but do not claim that historical events caused a current result unless the input explicitly establishes that relationship.\n\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1056,
+        0
+      ],
+      "id": "a800b815-8878-497a-bb00-16b25affa76d",
+      "name": "Risk & Explanation AI"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxTokens": 8000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1136,
+        240
+      ],
+      "id": "6148cb79-8a39-4eeb-891b-6aa3d31bf763",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "QklJA7sbplfgZO3e",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Compare the supplier records below and produce the recommendation according to the system instructions.\nInclude the Recommended Product, Recommended Total Price, and Recommended Compliance Status exactly as provided in the supplier data. Do not calculate or invent these values.\nSupplier data:\n{{ JSON.stringify($json.suppliers) }}\n\nReturn ONLY the required JSON object.",
+        "options": {
+          "systemMessage": "You are the Compare & Recommend AI in a Supplier Evaluation & Operations workflow.\n\nYour role is to compare all supplier records provided in the input and produce a final supplier recommendation for review by the Operations Manager.\n\nYou MUST:\n- Compare all suppliers provided.\n- Use the purchase requirements, compliance results, supplier history, and Risk Explanation provided in the input.\n- Treat the deterministic Compliance Status and Compliance Checks as authoritative.\n- Consider both requirement compliance and relevant supplier history/risk.\n- Clearly explain why the recommended supplier is suitable.\n- Identify important weaknesses or risks of other suppliers when relevant.\n- Base every conclusion only on information provided in the input.\n\nYou MUST NOT:\n- Invent supplier information.\n- Invent evaluation criteria.\n- Change, override, or recalculate deterministic compliance results.\n- Treat missing information as if it were known.\n- Claim that the Operations Manager has approved the purchase.\n- Make a recommendation based on information not present in the input. \n- Do not infer that all orders were checked individually; use the exact historical fields provided.\n- When describing historical performance, distinguish between the number of orders and the number of late deliveries.\n- If an alternative supplier is non-compliant, clearly state that it requires correction or manager consideration before it can be used.\n\nThe Operations Manager retains final approval authority.\n\nReturn ONLY valid JSON. Do not use Markdown or code fences.\n\n{\n  \"Recommended Supplier ID\": \"\",\n  \"Recommended Supplier Name\": \"\",\n  \"Recommendation Status\": \"\",\n  \"Recommendation Reason\": \"\",\n  \"Key Strengths\": [],\n  \"Key Risks\": [],\n  \"Alternative Supplier\": \"\",\n  \"Alternative Supplier Status\": \"\",\n  \"Manager Approval Required\": true\n\"Recommended Product\": \"\",\n\"Recommended Total Price\": \"\",\n\"Recommended Compliance Status\": \"\",\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1632,
+        0
+      ],
+      "id": "3ce18be8-70f5-4a63-89da-891ac7d9d8d0",
+      "name": "Compare and Recommend"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxTokens": 5000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        1712,
+        240
+      ],
+      "id": "29dbfc25-506c-4d27-96ee-215f7f850671",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "QklJA7sbplfgZO3e",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "63ff30a5-78ef-4d0f-9dde-46a3a4feb57c",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        2656,
+        -64
+      ],
+      "id": "30938a04-0d64-46a6-baff-632571fb1daf",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175934466,
+          "mode": "list",
+          "cachedResultName": "Evaluation Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit#gid=175934466"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Run ID": "={{ $execution.id }}",
+            "Supplier ID": "={{ JSON.parse($('Compare and Recommend').item.json.output)[\"Recommended Supplier ID\"] }}",
+            "Supplier Name": "={{ JSON.parse($('Compare and Recommend').item.json.output)[\"Recommended Supplier Name\"] }}",
+            "Mandatory Compliance": "={{ JSON.parse($('Compare and Recommend').item.json.output)[\"Recommended Compliance Status\"] }}",
+            "Risk Flags": "={{ JSON.parse($('Compare and Recommend').item.json.output)[\"Key Risks\"].join(\"; \") }}",
+            "Missing Information": "None",
+            "AI Risk Summary": "={{ JSON.parse($('Compare and Recommend').item.json.output)[\"Key Risks\"].join(\" \") }}",
+            "AI Recommendation": "={{ $('Compare and Recommend').item.json.output }}",
+            "Operations Manager Decision": "Approved",
+            "Timestamp": "={{ $now }}",
+            "Preference Flags": "--"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Run ID",
+              "displayName": "Run ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier ID",
+              "displayName": "Supplier ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier Name",
+              "displayName": "Supplier Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mandatory Compliance",
+              "displayName": "Mandatory Compliance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Preference Flags",
+              "displayName": "Preference Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risk Flags",
+              "displayName": "Risk Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Information",
+              "displayName": "Missing Information",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Risk Summary",
+              "displayName": "AI Risk Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Recommendation",
+              "displayName": "AI Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Operations Manager Decision",
+              "displayName": "Operations Manager Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2880,
+        -160
+      ],
+      "id": "722353d7-f915-42a2-9b2f-97800d7abfeb",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Re-evaluate the supplier options using the original supplier evaluation data from the workflow.\n\nPrevious recommendation:\n{{ $('Compare and Recommend').item.json.output }}\n\nManager decision:\n{{ $json.Decision }}\n\nOriginal evaluated supplier data:\n{{ JSON.stringify($('Risk & Explanation AI').all().map(item => item.json.output)) }}\n\nOriginal purchase requirements and supplier evaluation data are available from the workflow nodes.\n\nIMPORTANT:\n- The previous recommendation identifies the supplier that was rejected.\n- Exclude that supplier from the new recommendation.\n- Use the actual supplier information from the original evaluated supplier data.\n- Do not invent or substitute any supplier information.\n- Compliance results from the original evaluation are authoritative.\n- If all remaining suppliers are non-compliant, recommend the strongest remaining candidate and clearly state its compliance issue.\n\nReturn the recommendation using the same JSON structure as the Compare & Recommend AI.",
+        "options": {
+          "systemMessage": "You are the Re-Evaluation & Alternative Supplier Agent for Everest Manufacturing Pvt. Ltd.\n\nThe Operations Manager has declined the previous supplier recommendation.\n\nYour task is to re-evaluate the suppliers and recommend the strongest remaining candidate.\n\nIMPORTANT DATA RULES:\n1. Use ONLY supplier information provided in the input data.\n2. Do NOT invent, estimate, substitute, or modify supplier names, IDs, products, prices, warranty periods, delivery times, ratings, history, or any other supplier information.\n3. The supplier quotation data is authoritative for supplier quotation fields.\n4. Supplier history data is authoritative for historical performance.\n5. Compliance results provided by the Compliance Checker are authoritative. Do NOT recalculate, change, or override them.\n6. Purchase Request data is authoritative for the procurement requirements.\n\nRE-EVALUATION RULES:\n1. The previous recommendation was rejected by the Operations Manager.\n2. Identify the previously recommended Supplier ID from the previous recommendation.\n3. The previously recommended supplier MUST NOT be recommended again.\n4. Exclude the rejected supplier from consideration.\n5. Re-evaluate all remaining suppliers using the provided purchase requirements, compliance results, supplier history, and risk information.\n6. Select the strongest remaining supplier based on the available data.\n7. If all remaining suppliers are non-compliant, select the strongest remaining candidate but clearly state that the supplier is non-compliant and explain the specific compliance issues.\n8. Do not invent or assume a reason for the manager's rejection because no rejection reason was provided.\n9. Manager approval is still required.\n10. If supplier information is missing from the input, do not make it up. State that the information is unavailable.\n\nIMPORTANT:\nThe previous recommendation is NOT supplier data. It is only used to identify which supplier must be excluded.\n\nOUTPUT:\nReturn ONLY valid JSON in exactly this structure:\n\n{\n  \"Recommended Supplier ID\": \"\",\n  \"Recommended Supplier Name\": \"\",\n  \"Recommendation Status\": \"\",\n  \"Recommendation Reason\": \"\",\n  \"Key Strengths\": [],\n  \"Key Risks\": [],\n  \"Alternative Supplier\": \"\",\n  \"Alternative Supplier Status\": \"\",\n  \"Manager Approval Required\": true,\n  \"Recommended Product\": \"\",\n  \"Recommended Total Price\": 0,\n  \"Recommended Compliance Status\": \"\"\n}"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        3104,
+        96
+      ],
+      "id": "04a2b37d-9fc1-4ce7-9b93-0bb01a3f85ef",
+      "name": "Re-evaluation Agent"
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxTokens": 5000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        3088,
+        304
+      ],
+      "id": "de50838d-5bc9-48a0-9936-bd3116785c87",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "QklJA7sbplfgZO3e",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.output;\n\nlet recommendation;\n\ntry {\n  recommendation = typeof raw === \"string\"\n    ? JSON.parse(raw)\n    : raw;\n} catch (error) {\n  throw new Error(`Could not parse Compare & Recommend output: ${error.message}`);\n}\n\nconst strengths = (recommendation[\"Key Strengths\"] || [])\n  .map(item => `<li>${item}</li>`)\n  .join(\"\");\n\nconst risks = (recommendation[\"Key Risks\"] || [])\n  .map(item => `<li>${item}</li>`)\n  .join(\"\");\n\nconst alternative = recommendation[\"Alternative Supplier\"]\n  ? `<li><strong>Alternative Supplier:</strong> ${recommendation[\"Alternative Supplier\"]} (${recommendation[\"Alternative Supplier Status\"] || \"Status not provided\"})</li>`\n  : \"\";\n\nconst email_body = `\n<p>Dear Operations Manager,</p>\n\n<p>Please find below the supplier evaluation summary for your review.</p>\n\n<h3>Recommended Supplier and Product</h3>\n\n<ul>\n  <li><strong>Supplier:</strong> ${recommendation[\"Recommended Supplier Name\"]} (Supplier ID: ${recommendation[\"Recommended Supplier ID\"]})</li>\n  <li><strong>Product:</strong> ${recommendation[\"Recommended Product\"]}</li>\n  <li><strong>Total Price:</strong> NPR ${Number(recommendation[\"Recommended Total Price\"]).toLocaleString()}</li>\n  <li><strong>Compliance Status:</strong> ${recommendation[\"Recommended Compliance Status\"]}</li>\n  <li><strong>Recommendation Status:</strong> ${recommendation[\"Recommendation Status\"]}</li>\n</ul>\n\n<h3>Key Reasons for Recommendation</h3>\n\n<p>${recommendation[\"Recommendation Reason\"]}</p>\n\n<h3>Key Strengths</h3>\n\n<ul>\n  ${strengths}\n</ul>\n\n<h3>Risks and Considerations</h3>\n\n<ul>\n  ${risks || \"<li>No specific risks identified.</li>\"}\n</ul>\n\n<h3>Comparison with Other Suppliers</h3>\n\n<ul>\n  ${alternative}\n</ul>\n\n<p><strong>Manager Approval Required:</strong> Yes</p>\n\n<p>Please review the recommendation and provide your approval or feedback.</p>\n\n<p>Best regards,<br>\nSupplier Evaluation &amp; Operations Workflow</p>\n`;\n\nreturn [\n  {\n    json: {\n      email_body\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1984,
+        0
+      ],
+      "id": "239f31eb-bc2a-472b-9ff4-b11ea9af2ca4",
+      "name": "Email formatter"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5252c0d1-4957-478a-9aca-56572dac4111",
+              "name": "Decision",
+              "value": "={{ $json.data.approved ? \"Approved\" : \"Declined\" }}",
+              "type": "string"
+            },
+            {
+              "id": "8163acec-480d-4cec-97ff-565737ae542d",
+              "name": "Recommendation",
+              "value": "={{ $('Compare and Recommend').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "c79a6dab-b591-41d8-8b9c-f3d5d5ee53e2",
+              "name": "Attempt",
+              "value": "={{ Number($('Attempt Counter').item.json.Attempt) + 1 }}",
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2880,
+        32
+      ],
+      "id": "c719ba0c-4b1c-4222-876f-5c06f09cffca",
+      "name": "Re-evaluation Input"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "fad70dbc-f5bd-4f35-86ef-99d54fe8c199",
+              "name": "Attempt",
+              "value": 1,
+              "type": "number"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        2208,
+        -64
+      ],
+      "id": "1805c22f-06ac-4d28-bf97-c2ce37470eee",
+      "name": "Attempt Counter"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "aalishmap@gmail.com",
+        "subject": "=Supplier Evaluation — Attempt {{ $json.Attempt }}",
+        "message": "={{ $json.email_body }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        2432,
+        -64
+      ],
+      "id": "f355c2ab-a997-4443-938b-725ace89b6d4",
+      "name": "Gmail",
+      "webhookId": "5ec7d004-5d39-4c41-80ee-023cb55606c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5giE6CCj6oPnVd1b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const suppliers = $input.all().map(item => {\n  const raw = item.json.output;\n\n  try {\n    return typeof raw === \"string\" ? JSON.parse(raw) : raw;\n  } catch (error) {\n    throw new Error(`Invalid supplier JSON: ${error.message}`);\n  }\n});\n\nreturn [\n  {\n    json: {\n      suppliers\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        0
+      ],
+      "id": "612b42ff-e918-4d22-a668-4b969eddb932",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\n  const raw = item.json.output;\n\n  let recommendation;\n\n  try {\n    recommendation = typeof raw === \"string\"\n      ? JSON.parse(raw)\n      : raw;\n  } catch (error) {\n    throw new Error(\n      `Could not parse Re-evaluation AI output: ${error.message}`\n    );\n  }\n\n  if (\n    !recommendation ||\n    typeof recommendation !== \"object\" ||\n    Array.isArray(recommendation)\n  ) {\n    throw new Error(\"Re-evaluation AI output is not a valid JSON object.\");\n  }\n\n  const strengths = Array.isArray(recommendation[\"Key Strengths\"])\n    ? recommendation[\"Key Strengths\"]\n        .map(item => `<li>${item}</li>`)\n        .join(\"\")\n    : \"<li>No specific strengths provided.</li>\";\n\n  const risks = Array.isArray(recommendation[\"Key Risks\"])\n    ? recommendation[\"Key Risks\"]\n        .map(item => `<li>${item}</li>`)\n        .join(\"\")\n    : \"<li>No specific risks identified.</li>\";\n\n  const alternative = recommendation[\"Alternative Supplier\"]\n    ? `<li><strong>Alternative Supplier:</strong> ${recommendation[\"Alternative Supplier\"]} (${recommendation[\"Alternative Supplier Status\"] || \"Status not provided\"})</li>`\n    : \"<li>No alternative supplier available.</li>\";\n\n  const price = Number(recommendation[\"Recommended Total Price\"]);\n\n  const formattedPrice = Number.isFinite(price)\n    ? price.toLocaleString()\n    : recommendation[\"Recommended Total Price\"] || \"Not provided\";\n\n  const email_body = `\n<p>Dear Operations Manager,</p>\n\n<p>The previous supplier recommendation was declined. Please find below the re-evaluation and alternative supplier recommendation.</p>\n\n<h3>Re-evaluated Supplier and Product</h3>\n\n<ul>\n  <li><strong>Supplier:</strong> ${recommendation[\"Recommended Supplier Name\"]} (Supplier ID: ${recommendation[\"Recommended Supplier ID\"]})</li>\n  <li><strong>Product:</strong> ${recommendation[\"Recommended Product\"]}</li>\n  <li><strong>Total Price:</strong> NPR ${formattedPrice}</li>\n  <li><strong>Compliance Status:</strong> ${recommendation[\"Recommended Compliance Status\"]}</li>\n  <li><strong>Recommendation Status:</strong> ${recommendation[\"Recommendation Status\"]}</li>\n</ul>\n\n<h3>Reason for Re-evaluation Recommendation</h3>\n\n<p>${recommendation[\"Recommendation Reason\"]}</p>\n\n<h3>Key Strengths</h3>\n\n<ul>\n  ${strengths}\n</ul>\n\n<h3>Risks and Considerations</h3>\n\n<ul>\n  ${risks}\n</ul>\n\n<h3>Comparison with Other Suppliers</h3>\n\n<ul>\n  ${alternative}\n</ul>\n\n<p><strong>Manager Approval Required:</strong> Yes</p>\n\n<p>Please review this re-evaluation and provide your approval.</p>\n\n<p>Best regards,<br>\nSupplier Evaluation &amp; Operations Workflow</p>\n`;\n\n  return {\n    json: {\n      email_body: email_body,\n      Attempt: 2\n    }\n  };\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3456,
+        96
+      ],
+      "id": "e72c2e8c-f9a0-44bd-864a-3c8b5fb3042d",
+      "name": "Email format 2"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "aalishmap@gmail.com",
+        "subject": "=Supplier Evaluation — Attempt {{ $json.Attempt }}",
+        "message": "={{ $json.email_body }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        3792,
+        96
+      ],
+      "id": "b9051ddc-d9ee-4e3b-985a-ba0ff4a3b0d9",
+      "name": "re-evaluation mail",
+      "webhookId": "5ec7d004-5d39-4c41-80ee-023cb55606c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5giE6CCj6oPnVd1b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "4c8c125f-7b96-4121-a873-a7a3d253d043",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "false",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        4016,
+        96
+      ],
+      "id": "4db71985-4756-4005-93ef-b38d4c2b9ee4",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 175934466,
+          "mode": "list",
+          "cachedResultName": "Evaluation Log",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit#gid=175934466"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Run ID": "={{ $execution.id }}",
+            "Supplier ID": "={{ JSON.parse($('Re-evaluation Agent').first().json.output)[\"Recommended Supplier ID\"] }}",
+            "Supplier Name": "={{ JSON.parse($('Re-evaluation Agent').first().json.output)[\"Recommended Supplier Name\"] }}",
+            "Mandatory Compliance": "={{ JSON.parse($('Re-evaluation Agent').first().json.output)[\"Recommended Compliance Status\"] }}",
+            "Risk Flags": "={{ JSON.parse($('Re-evaluation Agent').first().json.output)[\"Key Risks\"].join(\"; \") }}",
+            "Missing Information": "None",
+            "AI Risk Summary": "={{ JSON.parse($('Re-evaluation Agent').first().json.output)[\"Key Risks\"].join(\" \") }}",
+            "AI Recommendation": "={{ $('Re-evaluation Agent').first().json.output }}",
+            "Operations Manager Decision": "={{ $json.data.approved ? \"Approved\" : \"Declined\" }}",
+            "Timestamp": "={{ $json.data.respondedAt }}",
+            "Preference Flags": "--"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Run ID",
+              "displayName": "Run ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier ID",
+              "displayName": "Supplier ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier Name",
+              "displayName": "Supplier Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mandatory Compliance",
+              "displayName": "Mandatory Compliance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Preference Flags",
+              "displayName": "Preference Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risk Flags",
+              "displayName": "Risk Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Information",
+              "displayName": "Missing Information",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Risk Summary",
+              "displayName": "AI Risk Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Recommendation",
+              "displayName": "AI Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Operations Manager Decision",
+              "displayName": "Operations Manager Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        4240,
+        -96
+      ],
+      "id": "3e4a1abc-a1aa-41ef-94c4-d7e333a07f74",
+      "name": "Append row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5252c0d1-4957-478a-9aca-56572dac4111",
+              "name": "Decision",
+              "value": "={{ $json.data.approved ? \"Approved\" : \"Declined\" }}",
+              "type": "string"
+            },
+            {
+              "id": "8163acec-480d-4cec-97ff-565737ae542d",
+              "name": "Recommendation",
+              "value": "={{ $('Re-evaluation Agent').item.json.output }}",
+              "type": "string"
+            },
+            {
+              "id": "c79a6dab-b591-41d8-8b9c-f3d5d5ee53e2",
+              "name": "Attempt",
+              "value": "={{ Number($('Attempt Counter').item.json.Attempt) + 1 }}",
+              "type": "number"
+            },
+            {
+              "id": "67699711-cda8-4e1a-a8c0-3c6385b629a4",
+              "name": "Rejected Supplier IDs",
+              "value": "={{ [\n  JSON.parse($('Compare and Recommend').first().json.output)['Recommended Supplier ID'],\n  JSON.parse($('Re-evaluation Agent').first().json.output)['Recommended Supplier ID']\n].join(',') }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        4272,
+        112
+      ],
+      "id": "9e176790-2a10-4beb-9d04-fa946dd2aa64",
+      "name": "Re-evaluation Input1"
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\n\nreturn items.map(item => {\nconst data = item.json;\n\nlet recommendation;\n\ntry {\nrecommendation = typeof data.output === 'string'\n? JSON.parse(data.output)\n: data.output;\n} catch (error) {\nthrow new Error('Could not parse the recommendation JSON.');\n}\n\nconst attempt = Number(data.Attempt || 3);\n\nconst supplier = recommendation[\"Recommended Supplier Name\"] || \"N/A\";\nconst supplierId = recommendation[\"Recommended Supplier ID\"] || \"N/A\";\nconst product = recommendation[\"Recommended Product\"] || \"N/A\";\nconst totalPrice = recommendation[\"Recommended Total Price\"] ?? \"N/A\";\nconst status = recommendation[\"Recommendation Status\"] || \"N/A\";\nconst compliance = recommendation[\"Recommended Compliance Status\"] || \"N/A\";\nconst reason = recommendation[\"Recommendation Reason\"] || \"N/A\";\nconst strengths = recommendation[\"Key Strengths\"] || [];\nconst risks = recommendation[\"Key Risks\"] || [];\nconst approvalRequired = recommendation[\"Manager Approval Required\"] ? \"Yes\" : \"No\";\n\nconst strengthsHtml = strengths.length\n? `<ul>${strengths.map(x => `<li>${x}</li>`).join('')}</ul>`\n: '<p>N/A</p>';\n\nconst risksHtml = risks.length\n? `<ul>${risks.map(x => `<li>${x}</li>`).join('')}</ul>`\n: '<p>N/A</p>';\n\nconst email_body = `\n\n<p>Dear Operations Manager,</p>\n\n<p>The previous supplier recommendation was declined. A re-evaluation has therefore been completed.</p>\n\n<p><strong>Re-evaluation Attempt:</strong> ${attempt}</p>\n\n<p><strong>Recommended Supplier</strong></p>\n<ul>\n  <li><strong>Supplier:</strong> ${supplier}</li>\n  <li><strong>Supplier ID:</strong> ${supplierId}</li>\n  <li><strong>Product:</strong> ${product}</li>\n  <li><strong>Total Price:</strong> NPR ${Number(totalPrice).toLocaleString()}</li>\n  <li><strong>Recommendation Status:</strong> ${status}</li>\n  <li><strong>Compliance Status:</strong> ${compliance}</li>\n  <li><strong>Manager Approval Required:</strong> ${approvalRequired}</li>\n</ul>\n\n<p><strong>Recommendation Reason</strong></p>\n<p>${reason}</p>\n\n<p><strong>Key Strengths</strong></p>\n${strengthsHtml}\n\n<p><strong>Key Risks</strong></p>\n${risksHtml}\n\n<p>Please review the re-evaluated recommendation and provide your approval or rejection.</p>\n\n<p>Regards,<br>\nSupplier Evaluation System<br>\nEverest Manufacturing Operations</p>\n`;\n\nreturn {\njson: {\nemail_body,\nAttempt: attempt\n}\n};\n});\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4864,
+        208
+      ],
+      "id": "5f7f1c54-856c-4f84-a7a3-b088c60545ec",
+      "name": "Email format "
+    },
+    {
+      "parameters": {
+        "options": {
+          "maxTokens": 5000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        4448,
+        304
+      ],
+      "id": "17190820-7c57-488a-8cf2-3ed394a3532d",
+      "name": "OpenRouter Chat Model4",
+      "credentials": {
+        "openRouterApi": {
+          "id": "QklJA7sbplfgZO3e",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Re-evaluate the supplier options using the original supplier evaluation data from the workflow.\n\nPrevious recommendation:\n{{ $json.Recommendation }}\n\nManager decision:\n{{ $json.Decision }}\n\nCurrent attempt:\n{{ $json.Attempt }}\n\nREJECTED SUPPLIER IDS:\n{{ $json[\"Rejected Supplier IDs\"] }}\n\nOriginal evaluated supplier data:\n{{ JSON.stringify($('Risk & Explanation AI').all().map(item => item.json.output)) }}\n\nIMPORTANT RULES:\n\n1. The REJECTED SUPPLIER IDS list is authoritative.\n2. NEVER recommend a supplier whose ID appears in the REJECTED SUPPLIER IDS list.\n3. Do NOT assume a supplier was rejected merely because it is non-compliant.\n4. A supplier is rejected ONLY when its supplier ID appears in the REJECTED SUPPLIER IDS list.\n5. Select the strongest supplier from the suppliers that are NOT in the rejected list.\n6. A non-compliant supplier MAY still be recommended. If selected, clearly state its compliance issue and set:\n   \"Recommendation Status\": \"Recommended - Non-Compliant\"\n7. Use only supplier information contained in the original evaluated supplier data.\n8. Do not invent supplier names, IDs, prices, products, compliance results, or historical data.\n9. If only one supplier remains, evaluate that supplier.\n10. If no suppliers remain, return:\n    \"Recommended Supplier ID\": \"\",\n    \"Recommended Supplier Name\": \"\",\n    \"Recommendation Status\": \"No Supplier Available\"\n\nFor this attempt, the rejected supplier IDs are explicitly provided above. Follow that list exactly.\n\nReturn ONLY valid JSON using exactly this structure:\n\n{\n\"Recommended Supplier ID\": \"\",\n\"Recommended Supplier Name\": \"\",\n\"Recommendation Status\": \"\",\n\"Recommendation Reason\": \"\",\n\"Key Strengths\": [],\n\"Key Risks\": [],\n\"Alternative Supplier\": \"\",\n\"Alternative Supplier Status\": \"\",\n\"Manager Approval Required\": true,\n\"Recommended Product\": \"\",\n\"Recommended Total Price\": 0,\n\"Recommended Compliance Status\": \"\"\n}\n",
+        "options": {
+          "systemMessage": "You are the Re-evaluation Agent in a Supplier Evaluation & Operations workflow.\n\nA supplier recommendation has been rejected by the Operations Manager. Your job is to evaluate the remaining suppliers and produce the next supplier recommendation.\n\nIMPORTANT RULES:\n\n1. Read the current input carefully.\n2. Identify the supplier recommended in the previous attempt from the \"Recommendation\" field.\n3. That supplier has been rejected and MUST NOT be recommended again.\n4. Also exclude every supplier that was recommended and rejected in earlier attempts. Use the previous recommendation information provided in the input to maintain this rejection history.\n5. Evaluate only suppliers that have not already been recommended and rejected.\n6. If only one supplier remains, evaluate that supplier rather than choosing from the full supplier list.\n7. A supplier does NOT have to be fully compliant to be recommended. A non-compliant supplier may be recommended for manager approval, but every compliance failure must be clearly identified.\n8. Do not invent supplier information, compliance results, purchase history, prices, or requirements. Use only the data provided in the workflow input.\n9. Base deterministic compliance on the stated purchase requirements.\n10. Consider supplier purchase history when explaining the recommendation, including rating, late deliveries, quality complaints, and relationship history when available.\n11. If there are no suppliers remaining after excluding all previously rejected recommendations, do not recommend a supplier. Clearly state that all available suppliers have already been rejected.\n\nOUTPUT REQUIREMENTS:\n\nReturn ONLY valid JSON. Do not use Markdown fences.\n\nUse exactly this structure:\n\n{\n\"Recommended Supplier ID\": \"\",\n\"Recommended Supplier Name\": \"\",\n\"Recommendation Status\": \"\",\n\"Recommendation Reason\": \"\",\n\"Key Strengths\": [],\n\"Key Risks\": [],\n\"Alternative Supplier\": \"\",\n\"Alternative Supplier Status\": \"\",\n\"Manager Approval Required\": true,\n\"Recommended Product\": \"\",\n\"Recommended Total Price\": 0,\n\"Recommended Compliance Status\": \"\"\n}\n\nFor \"Recommendation Status\":\n\n* Use \"Recommended\" when the selected supplier is compliant.\n* Use \"Recommended - Non-Compliant\" when the selected supplier has one or more compliance failures.\n* If no supplier remains, use \"No Supplier Available\".\n\nFor \"Recommendation Reason\":\nExplain why the supplier was selected, identify previously rejected suppliers that were excluded, and clearly explain any compliance failures.\n\nFor \"Alternative Supplier\":\nIf another unevaluated supplier remains, provide its Supplier ID. Otherwise use an empty string.\n\nFor \"Manager Approval Required\":\nAlways set this to true because the recommendation must be reviewed by the Operations Manager.\n\nDo not recommend a previously rejected supplier.\nDo not reuse the original recommendation unless it is still genuinely eligible and has not been rejected.\nDo not create a fourth supplier when all suppliers have already been evaluated and rejected.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        4512,
+        128
+      ],
+      "id": "1c6a14b5-8a31-4236-908b-1f5cd1c3e2f8",
+      "name": "Re-evaluation Agent2"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "aalishmap@gmail.com",
+        "subject": "=Supplier Evaluation — Attempt {{ $json.Attempt }}",
+        "message": "={{ $json.email_body }}",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        5072,
+        208
+      ],
+      "id": "6ce0e06c-c8c4-4f1a-816f-977f202d7a5e",
+      "name": "final mail",
+      "webhookId": "5ec7d004-5d39-4c41-80ee-023cb55606c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5giE6CCj6oPnVd1b",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY",
+          "mode": "list",
+          "cachedResultName": "Everest Manufacturing – Supplier Evaluation",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/18xlYjcOm4GbUOjElw_mO0ewTbp18u8qjp52TRGWC0ZY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "=175934466",
+          "mode": "id"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Run ID": "={{ $execution.id }}",
+            "Supplier ID": "={{ JSON.parse($('Re-evaluation Agent2').first().json.output)[\"Recommended Supplier ID\"] }}",
+            "Supplier Name": "={{ JSON.parse($('Re-evaluation Agent2').first().json.output)[\"Recommended Supplier Name\"] }}",
+            "Mandatory Compliance": "={{ JSON.parse($('Re-evaluation Agent2').first().json.output)[\"Recommended Compliance Status\"] }}",
+            "Risk Flags": "={{ JSON.parse($('Re-evaluation Agent2').first().json.output)[\"Key Risks\"].join(\"; \") }}",
+            "Missing Information": "None",
+            "AI Risk Summary": "={{ JSON.parse($('Re-evaluation Agent2').first().json.output)[\"Key Risks\"].join(\" \") }}",
+            "AI Recommendation": "={{ $('Re-evaluation Agent2').first().json.output }}",
+            "Operations Manager Decision": "={{ $json.data.approved ? \"Approved\" : \"Declined\" }}",
+            "Timestamp": "={{ $json.data.respondedAt }}",
+            "Preference Flags": "--"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Run ID",
+              "displayName": "Run ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier ID",
+              "displayName": "Supplier ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Supplier Name",
+              "displayName": "Supplier Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mandatory Compliance",
+              "displayName": "Mandatory Compliance",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Preference Flags",
+              "displayName": "Preference Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Risk Flags",
+              "displayName": "Risk Flags",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Missing Information",
+              "displayName": "Missing Information",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Risk Summary",
+              "displayName": "AI Risk Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "AI Recommendation",
+              "displayName": "AI Recommendation",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Operations Manager Decision",
+              "displayName": "Operations Manager Decision",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        5536,
+        48
+      ],
+      "id": "1130880c-b837-479d-ba6b-a694e2542f4a",
+      "name": "Append row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "G3wawfm6KCXtOBiW",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "7fc1ac2a-2043-4078-ba85-0de63f899827",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        5296,
+        208
+      ],
+      "id": "e2f1e6b1-c664-493b-9036-a7dbe61f081a",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "sendTo": "aalishmap@gmail.com",
+        "subject": "Human Supervision Required — All Suppliers Rejected",
+        "message": "=<p>Dear Operations Manager,</p>\n\n<p><strong>Human supervision is required for the supplier evaluation.</strong></p>\n\n<p>All three available suppliers have now been rejected through the evaluation and approval process.</p>\n\n<p><strong>Evaluation Status:</strong> No supplier remains available for automatic recommendation.</p>\n\n<p><strong>Suppliers evaluated:</strong></p>\n<ul>\n  <li>S1 — TechNova Suppliers Pvt. Ltd.</li>\n  <li>S3 — Apex IT Traders</li>\n  <li>S2 — Digital Hub Nepal Pvt. Ltd.</li>\n</ul>\n\n<p>The automated re-evaluation process has therefore been stopped. Please review the supplier options manually and determine the appropriate next action.</p>\n\n<p><strong>Human decision required:</strong> Select an acceptable supplier, request new quotations, modify the purchase requirements, or take another appropriate procurement action.</p>\n\n<p>Regards,<br>\nSupplier Evaluation System<br>\nEverest Manufacturing Operations</p>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        5520,
+        288
+      ],
+      "id": "1e8c01ed-78ea-4ab3-ac9f-fad5af989ead",
+      "name": "final mail1",
+      "webhookId": "5ec7d004-5d39-4c41-80ee-023cb55606c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "5giE6CCj6oPnVd1b",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Supplier Quotations",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Supplier history",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Purchase request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Purchase request": {
+      "main": [
+        [
+          {
+            "node": "Merge 2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Supplier Quotations": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supplier history": {
+      "main": [
+        [
+          {
+            "node": "Merge 1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge 1": {
+      "main": [
+        [
+          {
+            "node": "Merge 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge 2": {
+      "main": [
+        [
+          {
+            "node": "Compliance checker",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compliance checker": {
+      "main": [
+        [
+          {
+            "node": "Risk & Explanation AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Risk & Explanation AI",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Risk & Explanation AI": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Compare and Recommend",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compare and Recommend": {
+      "main": [
+        [
+          {
+            "node": "Email formatter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Re-evaluation Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Re-evaluation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-evaluation Agent": {
+      "main": [
+        [
+          {
+            "node": "Email format 2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email formatter": {
+      "main": [
+        [
+          {
+            "node": "Attempt Counter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-evaluation Input": {
+      "main": [
+        [
+          {
+            "node": "Re-evaluation Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attempt Counter": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Compare and Recommend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email format 2": {
+      "main": [
+        [
+          {
+            "node": "re-evaluation mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "re-evaluation mail": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Re-evaluation Input1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-evaluation Input1": {
+      "main": [
+        [
+          {
+            "node": "Re-evaluation Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model4": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Re-evaluation Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Re-evaluation Agent2": {
+      "main": [
+        [
+          {
+            "node": "Email format ",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "final mail": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "final mail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email format ": {
+      "main": [
+        [
+          {
+            "node": "final mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "b9472b9f-7c88-4d85-9acf-e7f984ebd769",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "cd2e69446a3a19ffc16ed45ab932e13e48ce1c3d6dedd78730e1be241e1942b7"
+  },
+  "nodeGroups": [],
+  "id": "MBKVpaKI6sq9p0BY",
+  "tags": []
+}
